@@ -21,13 +21,17 @@ import java.util.List;
  */
 public class OrderUtil {
 
-    public static final Short STATUS_CREATE = 101;
+    /**
+     * 此处实际只需要：201-订单生成；102-用户取消订单；104：管理员取消订单；401：订单完成；
+     */
     public static final Short STATUS_PAY = 201;
-    public static final Short STATUS_SHIP = 301;
-    public static final Short STATUS_CONFIRM = 401;
     public static final Short STATUS_CANCEL = 102;
-    public static final Short STATUS_AUTO_CANCEL = 103;
     public static final Short STATUS_ADMIN_CANCEL = 104;
+    public static final Short STATUS_CONFIRM = 401;
+
+    public static final Short STATUS_CREATE = 101;
+    public static final Short STATUS_SHIP = 301;
+    public static final Short STATUS_AUTO_CANCEL = 103;
     public static final Short STATUS_REFUND = 202;
     public static final Short STATUS_REFUND_CONFIRM = 203;
     public static final Short STATUS_AUTO_CONFIRM = 402;
@@ -36,7 +40,7 @@ public class OrderUtil {
         int status = order.getOrderStatus().intValue();
 
         if (status == 101) {
-            return "未付款";
+            return "待支付";
         }
 
         if (status == 102) {
@@ -47,8 +51,12 @@ public class OrderUtil {
             return "已取消(系统)";
         }
 
+        if (status == 104) {
+            return "已取消";
+        }
+
         if (status == 201) {
-            return "已付款";
+            return "待发货";
         }
 
         if (status == 202) {
@@ -68,7 +76,7 @@ public class OrderUtil {
         }
 
         if (status == 401) {
-            return "已收货";
+            return "已完成";
         }
 
         if (status == 402) {
@@ -87,7 +95,7 @@ public class OrderUtil {
             // 如果订单没有被取消，且没有支付，则可支付，可取消
             handleOption.setCancel(true);
             handleOption.setPay(true);
-        } else if (status == 102 || status == 103) {
+        } else if (status == 102 || status == 103 || status == 104) {
             // 如果订单已经取消或是已完成，则可删除
             handleOption.setDelete(true);
         } else if (status == 201) {
@@ -125,19 +133,15 @@ public class OrderUtil {
 
         if (showType.equals(1)) {
             // 待付款订单
-            status.add((short) 101);
+            status.add((short) 201);
         } else if (showType.equals(2)) {
             // 待发货订单
-            status.add((short) 201);
-        } else if (showType.equals(3)) {
-            // 待收货订单
-            status.add((short) 301);
-        } else if (showType.equals(4)) {
-            // 待评价订单
             status.add((short) 401);
-//            系统超时自动取消，此时应该不支持评价
-//            status.add((short)402);
-        } else {
+        } else if (showType.equals(3)) {
+            // 已取消订单-包含用户取消和管理员取消
+            status.add((short) 102);
+            status.add((short) 104);
+        }else {
             return null;
         }
 

@@ -92,7 +92,7 @@ public class LitemallUser {
      *
      * @mbg.generated
      */
-    private Byte userLevel;
+    private Integer userLevel;
 
     /**
      *
@@ -351,7 +351,7 @@ public class LitemallUser {
      *
      * @mbg.generated
      */
-    public Byte getUserLevel() {
+    public Integer getUserLevel() {
         return userLevel;
     }
 
@@ -363,7 +363,7 @@ public class LitemallUser {
      *
      * @mbg.generated
      */
-    public void setUserLevel(Byte userLevel) {
+    public void setUserLevel(Integer userLevel) {
         this.userLevel = userLevel;
     }
 

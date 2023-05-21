@@ -101,7 +101,7 @@ public class AdminOrderController {
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单发货")
     @PostMapping("/ship")
     public Object ship(@RequestBody String body) {
-        return adminOrderService.ship(body);
+        return adminOrderService.shipV2(body);
     }
 
     @RequiresPermissions("admin:order:pay")

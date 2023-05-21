@@ -40,10 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 
@@ -252,6 +249,10 @@ public class WxOrderService {
         if (body == null) {
             return ResponseUtil.badArgument();
         }
+        LitemallUser user = userService.findById(userId);
+        if (Objects.isNull(user)) {
+            return ResponseUtil.fail(402, "用户不存在");
+        }
         Integer cartId = JacksonUtil.parseInteger(body, "cartId");
         Integer addressId = JacksonUtil.parseInteger(body, "addressId");
         Integer couponId = JacksonUtil.parseInteger(body, "couponId");
@@ -372,8 +373,9 @@ public class WxOrderService {
         // 订单
         order = new LitemallOrder();
         order.setUserId(userId);
+        order.setUserLevel(user.getUserLevel());
         order.setOrderSn(orderService.generateOrderSn(userId));
-        order.setOrderStatus(OrderUtil.STATUS_CREATE);
+        order.setOrderStatus(OrderUtil.STATUS_PAY);
         order.setConsignee(checkedAddress.getName());
         order.setMobile(checkedAddress.getTel());
         order.setMessage(message);

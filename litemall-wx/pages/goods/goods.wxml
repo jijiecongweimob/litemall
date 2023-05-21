@@ -50,7 +50,8 @@
     <view class="t">{{checkedSpecText}}</view>
     <van-icon class="i" name="arrow" />
   </view>
-  <view class="comments" wx:if="{{comment.count > 0}}">
+  <!-- 不用评价 -->
+  <!-- <view class="comments" wx:if="{{comment.count > 0}}">
     <view class="h">
       <navigator url="/pages/comment/comment?valueId={{goods.id}}&type=0">
         <text class="t">评价({{comment.count > 999 ? '999+' : comment.count}})</text>
@@ -81,8 +82,9 @@
         </view>
       </view>
     </view>
-  </view>
-  <view class="goods-attr">
+  </view> -->
+  <!-- 不用商品参数 -->
+  <!-- <view class="goods-attr">
     <view class="t">商品参数</view>
     <view class="l">
       <view class="item" wx:for="{{attribute}}" wx:key="name">
@@ -90,12 +92,12 @@
         <text class="right">{{item.value}}</text>
       </view>
     </view>
-  </view>
+  </view> -->
 
-  <view class="detail">
+  <!-- <view class="detail">
     <import src="/lib/wxParse/wxParse.wxml" />
     <template is="wxParse" data="{{wxParseData:goodsDetail.nodes}}" />
-  </view>
+  </view> -->
 
   <view class="common-problem">
     <view class="h">

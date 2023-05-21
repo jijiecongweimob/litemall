@@ -65,6 +65,7 @@ public class AdminOrderService {
         LitemallOrder order = orderService.findById(id);
         List<LitemallOrderGoods> orderGoods = orderGoodsService.queryByOid(id);
         UserVo user = userService.findUserVoById(order.getUserId());
+        user.setUserLevel(order.getUserLevel());
         Map<String, Object> data = new HashMap<>();
         data.put("order", order);
         data.put("orderGoods", orderGoods);
@@ -178,6 +179,42 @@ public class AdminOrderService {
                 new String[]{order.getOrderSn().substring(8, 14)});
 
         logHelper.logOrderSucceed("退款", "订单编号 " + order.getOrderSn());
+        return ResponseUtil.ok();
+    }
+
+    /**
+     * 发货
+     * 1. 检测当前订单是否能够发货
+     * 2. 设置订单发货状态
+     *
+     * @param body 订单信息，{ orderId：xxx, shipSn: xxx, shipChannel: xxx }
+     * @return 订单操作结果
+     * 成功则 { errno: 0, errmsg: '成功' }
+     * 失败则 { errno: XXX, errmsg: XXX }
+     */
+    public Object shipV2(String body) {
+        Integer orderId = JacksonUtil.parseInteger(body, "orderId");
+        if (orderId == null) {
+            return ResponseUtil.badArgument();
+        }
+
+        LitemallOrder order = orderService.findById(orderId);
+        if (order == null) {
+            return ResponseUtil.badArgument();
+        }
+
+        // 如果订单不是已付款状态，则不能发货
+        if (!order.getOrderStatus().equals(OrderUtil.STATUS_PAY)) {
+            return ResponseUtil.fail(ORDER_CONFIRM_NOT_ALLOWED, "订单不能发货");
+        }
+
+        order.setOrderStatus(OrderUtil.STATUS_CONFIRM);
+        order.setShipTime(LocalDateTime.now());
+        if (orderService.updateWithOptimisticLocker(order) == 0) {
+            return ResponseUtil.updatedDateExpired();
+        }
+
+        logHelper.logOrderSucceed("发货", "订单编号 " + order.getOrderSn());
         return ResponseUtil.ok();
     }
 

@@ -10,7 +10,7 @@
         <el-form-item label="商品名称" prop="name">
           <el-input v-model="goods.name" />
         </el-form-item>
-        <el-form-item label="市场售价" prop="counterPrice">
+        <el-form-item label="市场售价（划线价）" prop="counterPrice">
           <el-input v-model="goods.counterPrice" placeholder="0.00">
             <template slot="append">元</template>
           </el-input>
@@ -27,28 +27,28 @@
             <el-radio :label="true">热卖</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="是否在售" prop="isOnSale">
+        <el-form-item label="是否上架" prop="isOnSale">
           <el-radio-group v-model="goods.isOnSale">
-            <el-radio :label="true">在售</el-radio>
-            <el-radio :label="false">未售</el-radio>
+            <el-radio :label="true">上架</el-radio>
+            <el-radio :label="false">下架</el-radio>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="商品图片">
-          <el-upload
-            :action="uploadPath"
-            :show-file-list="false"
-            :headers="headers"
-            :on-success="uploadPicUrl"
-            class="avatar-uploader"
-            accept=".jpg,.jpeg,.png,.gif"
-          >
-            <img v-if="goods.picUrl" :src="goods.picUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon" />
-          </el-upload>
-        </el-form-item>
+        <!--        <el-form-item label="商品图片">-->
+        <!--          <el-upload-->
+        <!--            :action="uploadPath"-->
+        <!--            :show-file-list="false"-->
+        <!--            :headers="headers"-->
+        <!--            :on-success="uploadPicUrl"-->
+        <!--            class="avatar-uploader"-->
+        <!--            accept=".jpg,.jpeg,.png,.gif"-->
+        <!--          >-->
+        <!--            <img v-if="goods.picUrl" :src="goods.picUrl" class="avatar">-->
+        <!--            <i v-else class="el-icon-plus avatar-uploader-icon" />-->
+        <!--          </el-upload>-->
+        <!--        </el-form-item>-->
 
-        <el-form-item label="宣传画廊">
+        <el-form-item label="宣传画廊（商详页滚动图）">
           <el-upload
             :action="uploadPath"
             :limit="5"
@@ -68,31 +68,31 @@
           <el-input v-model="goods.unit" placeholder="件 / 个 / 盒" />
         </el-form-item>
 
-        <el-form-item label="关键字">
-          <el-tag v-for="tag in keywords" :key="tag" closable type="primary" @close="handleClose(tag)">
-            {{ tag }}
-          </el-tag>
-          <el-input
-            v-if="newKeywordVisible"
-            ref="newKeywordInput"
-            v-model="newKeyword"
-            class="input-new-keyword"
+        <!--        <el-form-item label="关键字">-->
+        <!--          <el-tag v-for="tag in keywords" :key="tag" closable type="primary" @close="handleClose(tag)">-->
+        <!--            {{ tag }}-->
+        <!--          </el-tag>-->
+        <!--          <el-input-->
+        <!--            v-if="newKeywordVisible"-->
+        <!--            ref="newKeywordInput"-->
+        <!--            v-model="newKeyword"-->
+        <!--            class="input-new-keyword"-->
 
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          />
-          <el-button v-else class="button-new-keyword" type="primary" @click="showInput">+ 增加</el-button>
-        </el-form-item>
+        <!--            @keyup.enter.native="handleInputConfirm"-->
+        <!--            @blur="handleInputConfirm"-->
+        <!--          />-->
+        <!--          <el-button v-else class="button-new-keyword" type="primary" @click="showInput">+ 增加</el-button>-->
+        <!--        </el-form-item>-->
 
         <el-form-item label="所属分类">
           <el-cascader :options="categoryList" expand-trigger="hover" clearable @change="handleCategoryChange" />
         </el-form-item>
 
-        <el-form-item label="所属品牌商">
-          <el-select v-model="goods.brandId" clearable>
-            <el-option v-for="item in brandList" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
+        <!--        <el-form-item label="所属品牌商">-->
+        <!--          <el-select v-model="goods.brandId" clearable>-->
+        <!--            <el-option v-for="item in brandList" :key="item.value" :label="item.label" :value="item.value" />-->
+        <!--          </el-select>-->
+        <!--        </el-form-item>-->
 
         <el-form-item label="商品简介">
           <el-input v-model="goods.brief" />
@@ -110,7 +110,7 @@
         <el-col :span="10">
           <el-radio-group v-model="multipleSpec" @change="specChanged">
             <el-radio-button :label="false">默认标准规格</el-radio-button>
-            <el-radio-button :label="true">多规格支持</el-radio-button>
+            <!--            <el-radio-button :label="true">多规格支持</el-radio-button>-->
           </el-radio-group>
         </el-col>
         <el-col v-if="multipleSpec" :span="10">
@@ -247,41 +247,41 @@
       </el-dialog>
     </el-card>
 
-    <el-card class="box-card">
-      <h3>商品参数</h3>
-      <el-button type="primary" @click="handleAttributeShow">添加</el-button>
-      <el-table :data="attributes">
-        <el-table-column property="attribute" label="商品参数名称" />
-        <el-table-column property="value" label="商品参数值" />
-        <el-table-column align="center" label="操作" width="100" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleAttributeDelete(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+    <!--    <el-card class="box-card">-->
+    <!--      <h3>商品参数</h3>-->
+    <!--      <el-button type="primary" @click="handleAttributeShow">添加</el-button>-->
+    <!--      <el-table :data="attributes">-->
+    <!--        <el-table-column property="attribute" label="商品参数名称" />-->
+    <!--        <el-table-column property="value" label="商品参数值" />-->
+    <!--        <el-table-column align="center" label="操作" width="100" class-name="small-padding fixed-width">-->
+    <!--          <template slot-scope="scope">-->
+    <!--            <el-button type="danger" size="mini" @click="handleAttributeDelete(scope.row)">删除</el-button>-->
+    <!--          </template>-->
+    <!--        </el-table-column>-->
+    <!--      </el-table>-->
 
-      <el-dialog :visible.sync="attributeVisiable" title="添加商品参数">
-        <el-form
-          ref="attributeForm"
-          :model="attributeForm"
-          status-icon
-          label-position="left"
-          label-width="100px"
-          style="width: 400px; margin-left:50px;"
-        >
-          <el-form-item label="商品参数名称" prop="attribute">
-            <el-input v-model="attributeForm.attribute" />
-          </el-form-item>
-          <el-form-item label="商品参数值" prop="value">
-            <el-input v-model="attributeForm.value" />
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="attributeVisiable = false">取消</el-button>
-          <el-button type="primary" @click="handleAttributeAdd">确定</el-button>
-        </div>
-      </el-dialog>
-    </el-card>
+    <!--      <el-dialog :visible.sync="attributeVisiable" title="添加商品参数">-->
+    <!--        <el-form-->
+    <!--          ref="attributeForm"-->
+    <!--          :model="attributeForm"-->
+    <!--          status-icon-->
+    <!--          label-position="left"-->
+    <!--          label-width="100px"-->
+    <!--          style="width: 400px; margin-left:50px;"-->
+    <!--        >-->
+    <!--          <el-form-item label="商品参数名称" prop="attribute">-->
+    <!--            <el-input v-model="attributeForm.attribute" />-->
+    <!--          </el-form-item>-->
+    <!--          <el-form-item label="商品参数值" prop="value">-->
+    <!--            <el-input v-model="attributeForm.value" />-->
+    <!--          </el-form-item>-->
+    <!--        </el-form>-->
+    <!--        <div slot="footer" class="dialog-footer">-->
+    <!--          <el-button @click="attributeVisiable = false">取消</el-button>-->
+    <!--          <el-button type="primary" @click="handleAttributeAdd">确定</el-button>-->
+    <!--        </div>-->
+    <!--      </el-dialog>-->
+    <!--    </el-card>-->
 
     <div class="op-container">
       <el-button @click="handleCancel">取消</el-button>

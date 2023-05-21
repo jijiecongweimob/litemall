@@ -29,9 +29,9 @@
             <el-form-item label="商品单位">
               <span>{{ props.row.unit }}</span>
             </el-form-item>
-            <el-form-item label="关键字">
-              <span>{{ props.row.keywords }}</span>
-            </el-form-item>
+            <!--            <el-form-item label="关键字">-->
+            <!--              <span>{{ props.row.keywords }}</span>-->
+            <!--            </el-form-item>-->
             <el-form-item label="类目ID">
               <span>{{ props.row.categoryId }}</span>
             </el-form-item>
@@ -53,11 +53,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" property="iconUrl" label="分享图">
-        <template slot-scope="scope">
-          <img :src="scope.row.shareUrl" width="40">
-        </template>
-      </el-table-column>
+      <!--      <el-table-column align="center" property="iconUrl" label="分享图">-->
+      <!--        <template slot-scope="scope">-->
+      <!--          <img :src="scope.row.shareUrl" width="40">-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
 
       <el-table-column align="center" label="详情" prop="detail">
         <template slot-scope="scope">
@@ -86,12 +86,13 @@
 
       <el-table-column align="center" label="是否在售" prop="isOnSale">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.isOnSale ? 'success' : 'error' ">{{ scope.row.isOnSale ? '在售' : '未售' }}</el-tag>
+          <el-tag :type="scope.row.isOnSale ? 'success' : 'error' ">{{ scope.row.isOnSale ? '上架' : '下架' }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="250" class-name="oper">
         <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="handleIsOnSale(scope.row)">{{ scope.row.isOnSale ? '下架' : '上架' }}</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -184,6 +185,9 @@ export default {
     },
     handleUpdate(row) {
       this.$router.push({ path: '/goods/edit', query: { id: row.id }})
+    },
+    handleIsOnSale(row) {
+      console.log('上下架')
     },
     showDetail(detail) {
       this.goodsDetail = detail
